@@ -1,0 +1,172 @@
+
+===================
+ BREAK DSA - part 1
+===================
+
+The following questions will walk you through a scenario where DSA is implemented badly in a number of ways. DSA is secure (up to solving y = g^x (mod p), the discrete log problem) but incredibly fragile, and it's very easy to use it insecurely.
+
+Throughout the questions I'll use the same variable names and notation as is on the Wikipedia DSA page, so it's easier to understand how the formulas relate to one another.
+x = private key, y = public key, k = ephemeral value, H = hash function, m = message, ... etc.
+
+A lot of the questions will require paper and pen calculations before cracking them with code, so feel free to work your way down the list before coding everything up in Python.
+The pen and paper calculations will mostly require playing with numbers (mod q), so it will definitely help to make yourself comfortable with modular arithmetic! 
+In particular it helps to know that you can add, subtract and multiply numbers normally, and rules of indices work the exact same way as normal.
+Instead of division, however, (for every number except 0) you must instead multiply by its multiplicative inverse (mod q) to "divide by" that number (useful for moving things around equations). There are no fractions, only whole numbers!
+A multiplicative inverse is just the number you multiply by to get 1. E.g. 2 * 4 = 1 (mod 7) so 2 is the inverse of 4, and so instead of dividing by 2 you multiply by 4! Simple! (Maybe try a few examples)
+For example if we have 4x = 6 (mod 11), then we may calculate 3*4x = 3*6 (mod 11), 12x = 18 (mod 11), x = 7 (mod 11).
+When the modulus is a prime (like q) an easy way of finding an inverse is by using Fermat's Little Theorem (google it). What's special about the number a^(p - 2) (mod q)?
+
+Finally, the fiddly business of converting bytes to integers and back is tricky and can be frustrating so you'll have code to do that for you as well as for hashing strings/bytes.
+
+
+
+1)	Alice is the boss of a small company. She often sends messages to the workforce, but lately she's heard worrying stories of employees receiving messages saying they're from her when they weren't.
+	Eve is one of Alice's employees and Alice has long suspected her of being the guilty party, ever since she and Eve had an argument over lunch about Alice's favourite meal: beef and coffee. 
+	Alice thinks about her situation and decides to start signing each of her messages with DSA. She sends everyone the following message signature pair:
+
+	"Hi all,
+	From now on I'm going to be signing my emails with DSA so you know it's me. I'll be using the following parameters:
+	p = 0x800000000000000089e1855218a0e7dac38136ffafa72eda7859f2171e25e65eac698c1702578b07dc2a1076da241c76c62d374d8389ea5aeffd3226a0530cc565f3bf6b50929139ebeac04f48c3c84afb796d61e5a4f9a8fda812ab59494232c7d2b4deb50aa18ee9e132bfa85ac4374d7f9091abc3d015efc871a584471bb1
+	q = 0xf4f47f05794b256174bba6e9b396a7707e563c5b
+	g = 0x5958c9d3898b224b12672c0b98e06c60df923cb8bc999d119458fef538b8fa4046c8db53039db620c094c9fa077ef389b5322a559946a71903f990f1f7e0e025e2d7f7cf494aff1a0470f5b64c36b625a097f1651fe775323556fe00b3608c887892878480e99041be601a62166ca6894bdd41a7054ec89f756ba9fc95302291
+	x = 0xc0ffee
+	y = 0x71ce056d249efd15fd1d0aa1db97cc9944b4f8b5d7b5e23a75426629c26d0bbadf70e11fbc79040f57ff44b5aa468bfa8e2e726ba3b7718a89cfc78cd45eda98f8e145d3848855cd925ec13e3d44a88c2492dda293b40239ff6a265a381679a44d2a1393fcaab9d56a541d0db94e67260b40cb01b28fb856b8e18876de470ff4
+	- Alice"
+	r = 968122975261745054561805511895297282641641279955                                                                                                                               
+	s = 683324890805829105256759883887052508552354821874
+
+	(to save formatting anomalies, message hash = 0xe87288d30ba2e4b042c334e54a14620f467d213c)
+
+	Eve is the troublemaker who has been pretending to be Alice. She wants to carry on causing mischief but surely if Alice signs her messages with a NIST-standard signature scheme she won't be able to...
+	
+i)	How can Eve send out a message signed by Alice?
+ii)	Write a message from Eve and sign it using Alice's private key.
+
+
+2)	After Eve sent out a message signed by Alice telling everyone that Alice would be bringing in free doughnuts, Alice realised her mistake and sent out a correction (below).
+	Eve is stumped. She doesn't know the new private key, although now she looks at what it was last time she might be able to guess...
+
+	"Hi all, I will actually be using the public key y = 0x25f6cdc3dcae71233a89ecdfe1e49378068d9d53bf4e3bbc7015f043b3acfb935f2536e5e9a6a7adb8e3dc956fbaaab764781ff4cd361f04abd7c8df335586346a36efc25fcc1f89777711bcef8146d1c91e7911b4a1beaea77b88e1bc6ca3e67496e2ebdc47dcd9247c3488ac326d623bedac9dfb2758f4c4ff9532f94be70f"
+	r = 0xa99422b8cdb9cbe3e7b8dc07e6b1961191e711d3                                                                                                                                     
+	s = 0x636701fcd5579fdf7d08e282c621f0c015f0109d
+
+i)	If Eve did guess x, how would she know if she was correct? Write a function to do this.
+ii)	Guess x, and use part (i) to verify that you guessed correctly.
+iii)	(bonus) Sign a message with Alice's new private key.
+
+
+3)	Alice decides people have guessed her private key, and she decides to make a new one that's more secure and sends out her new y value.
+	Eve can't guess this new x and so decides to give up for now, when a new message appears from Alice.
+
+	"Eve, I know it's you doing this. I'm on to you!"
+	y = 0xe76f086c0a0a84ad2e2de8e2d85dc190c6ebcc95a59b633ed2d629b41abbb8b4e8fd2cb470fca8944f303ce7e1d2803754aa4c2a78ff3095d0c0e8da9398392bd70dbeef37aa49decbe2ad9f8de3831fea1a16ee03f94d38c9b60991c3d0933dfda2bbef1ac84d22496ee611c893dfa6473b3f99eb44348d7055dbcca7ec3f5"
+	r = 968122975261745054561805511895297282641641279955                                                                                                                               
+	s = 432087781537514176236201147877046188518419751770
+
+	Eve decides to resume causing trouble, but she needs a new avenue of attack.
+
+i)	What were the values of k used by Alice in questions (1) and (2)? Write a function to make this calculation easier.
+ii)	What do you notice? What k might she use next?
+iii)	If you know k, how would you calculate x? Write another function to do this.
+iv)	Calculate x, and verify your value is correct
+
+
+4)	After everyone gets a message telling them they can go home early, Alice furiously sends out the following messages.
+
+	"NO ONE GOES HOME BEFORE 1700!! My new public key is y = 0xbb89f7a65a94374eeee9d163ca04361399410461fba79c95a7d5dc6583b4e9825e15f4f22184b793dbeba77c97287970d8d24066fe5fc4d141b8f63eab0652a7c07da693bb39bc1f871293fc3dde1cf0411c8c07e8c3831171877504be9cc2d53e336caddd10df95ef04617dc21c0d1ec42f030d1f457423de4e960ed76878f"
+	r = 661234597779576826354076360705302486432553043557                                                    
+	s = 1131485779425066928091020544911913451575443327521
+
+	"Eve, I'm serious stop!"
+	r = 661234597779576826354076360705302486432553043557                                                    
+	s = 566587774277769614229558527696667245452764636283
+
+	Eve retries the same attack but Alice seems to have done things slightly differently. However she wonders if the same vulnerability is present in the newest pair of messages from Alice.
+
+i)	What seems strange to you about the two message signatures? What does this tell you? What could you have realised before?
+ii)	Use part (i) to show how you might calculate x (pen and paper)
+iii)	Write a function and calculate x, then verify you were correct.
+iv)	SPOILER ALERT (don't look until you've done part (ii), no cheating): google "ps3 ECDSA epic fail"
+v)	Think: Why is Alice's method of distributing public keys awful?
+
+
+5)	Alice changes her private key again and sends out an email about an 0800 meeting everyone will be forced to go to.
+
+	y = 0x4408953d3d931ee6c301f440d92a4865e6971de557efe3829a68a7bb0b67f56857d18b959fdf7ec8391540003e80149b80911e07eb3a51db428ddb1a981cf394014b17e0687fdde947d06c7bbc41cbc76cf4d70d1d37ed04bdddc80cb2448effa1eadb4f89f476577d2f853d3959222795e0c895a68477370dab7844d5719659
+	H(m) = 0x98cd3704dd19c3089ee3013ed0e63a6468550540
+	r = 194989536647105652605041858554600524713993852746                                                    
+	s = 1176342995783149316239084947597331837377765442012
+
+i)	Can Eve use what she knows about how Alice is changing k to guess the new k? 
+ii)	Guess k, recover x, and verify that you were correct.
+
+
+6)	It seems to Eve that Alice has had enough of her, and has begun changing her public/private key every week rather than implementing DSA securely. This means Eve is having a harder time cracking her private key each time.
+	Alice often spends the whole work day sending messages to her assistant Bob instead of working. After a week of radio silence, Eve gets the following two consecutive messages:
+	
+	H(m) = 0xb2278634fa8fda142e592e3a9067ff5d40c41485
+	r = 1082162714361121134443862535159281607533954232399                                                   
+	s = 444098981743433410284003800736028014743902117260
+
+	H(m) = 0x832870466697a98255d5868e20df31c715e84310
+	r = 418538345670185446366379399503215295799733526663                                                    
+	s = 781880939613497065852600806915362630569619506963
+
+	y = 0x5e2f9692ec0dc7772c545b85e975d155cfa0a7e033738e1090a5137b8d446c4df145a41e5135544df2ef0f2eaa117c989a6d2e6faaedf144358c2e56ae51940645154f39aaf0a7bc7db49fc3307fe40a18d10b8744544e5f05979fec13874e0f9b7211be46f131d8a9704c5d45d2fa9466ca1996aa7558bfbf6151f955ff54b9
+	
+	Eve hasn't heard from Alice for a while, and so the trick she used in part (5) will no longer work.
+	
+i)	Eve can't use the same trick she used in part (5), but there might be something else she can do if Alice is still generating her k values in the same way. How would she recover k? (pen and paper)
+ii)	Recover the two values of k, and hence recover x (or simply recover x directly).
+
+
+7)	The next pair of messages Eve recieves are a day apart and not consecutive, and Eve doesn't know how many messages Alice sent in the interim. She DOES know they're close together, however...
+
+	H(m) = 0xab33b3b6cfd70b7612bd4f4c937683fbaa2fe90d
+	r = 804206253961077009768756860512462046214044701880                                                    
+	s = 1384585769904696630498724375929003625285787473567
+	
+	H(m) = 0x3ac47b2925df4c3520617e0dc1a3dd3c88bb0aff
+	r = 1114565931804400983424167775387887924985896143951                                                   
+	s = 1383750431082928671297373286123992056323776778253
+
+
+	y = 0x6a46e23d3d4ed7e843eb702a38bf6c98fa2cf68999a089b1e0cb249eb8db8689d91f8eb09623f16cd7737a25ebbecc88b112098d674087348c8b1cd9033c5daa8556771b9115ebfc21e88e727ae1d8fe0532fc643be415a6a99792e00d5ba793a8ba2f3135d184cf76d2270b21d754d4d558a1d28a4687cff96c98bebb4af3cb
+
+i)	Suppose Eve knew how many messages Alice had sent between these two messages, how would she calculate k? (pen and paper)
+ii)	If Eve doesn't know how many messages apart they are, how might she use a computer to help her find out?
+iii)	recover the k values, and hence recover x.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
