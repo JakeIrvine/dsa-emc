@@ -48,7 +48,8 @@ def key_generation():
 
 def sign(m,priv_key):
     H = hash_function(m) # Compute the hash of the message
-    r,  s = 0
+    r = 0
+    s = 0
     
     while r == 0 or s == 0:
 
