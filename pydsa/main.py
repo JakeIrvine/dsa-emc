@@ -62,7 +62,7 @@ def sign(m,priv_key):
             
         # Add code to compute s = (k_inv * (H + priv_key*r)) mod Q
             
-        s = ((k_inv*(H+priv_key*r))%Q
+        s = (k_inv*(H+priv_key*r))%Q
 
     return r,s
 
