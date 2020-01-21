@@ -38,7 +38,6 @@ def modular_inverse(a,N):
 # Define a function to generate a DSA private and public key pair.
 
 def key_generation():
-
     priv_key = random.randint(1,Q-1) # Compute the private key
 	
     pub_key = pow(g,priv_key,P) # Compute the public key, pub_key = (g ^ priv_key) mod P
@@ -48,39 +47,33 @@ def key_generation():
 # Define a function to sign a message, m, with a private key, priv_key.
 
 def sign(m,priv_key):
-
     H = hash_function(m) # Compute the hash of the message
-
-    k = random.randint(1,Q-1) # Choose a random integer k
-	
-    k_inv = modular_inverse(k,Q) # Compute k^-1 mod Q
-	
-    # Add code to compute r = (g ^ k mod P) mod Q 
-	
-    r = ...
-	
-    # Add code to compute s = (k_inv * (H + priv_key*r)) mod Q
-	
-    s = ...
-	
+    r,  s = 0
+    
     while r == 0 or s == 0:
-        # If r or s are zero, we need to repeat the code to choose another k, compute k^-1 mod Q and compute r and s again
-        k = ...
-        k_inv = ...
-        r = ...
-        s = ...
+
+        k = random.randint(1,Q-1) # Choose a random integer k
+            
+        k_inv = modular_inverse(k,Q) # Compute k^-1 mod Q
+            
+        # Add code to compute r = (g ^ k mod P) mod Q 
+            
+        r = pow(g,k,P)%Q 
+            
+        # Add code to compute s = (k_inv * (H + priv_key*r)) mod Q
+            
+        s = ((k_inv*(H+priv_key*r))%Q
 
     return r,s
 
 # Define a function to verify a signature, sig, on a message, m, with public key, pub_key.
 
 def verify(sig,m,pub_key):
-
     r,s = sig
 
     # Add code to check whether 0<r<Q and 0<s<Q, otherwise the signature is rejected.
 	
-    if ... 
+    if 0<r<Q and 0<s<Q:
         return False	
 	
     H = hash_function(m) # Compute the hash of the message
@@ -89,11 +82,11 @@ def verify(sig,m,pub_key):
 	
     # Add code to compute v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
 	
-    v = ...
+    v = (pow(g,H*s_inv%Q)%P)%Q 
 
     # Add code to check that v == r
 	
-    if ...
+    if v==r: 
         return True
 	
     else:
