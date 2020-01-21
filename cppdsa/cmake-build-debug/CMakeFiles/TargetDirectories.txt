@@ -1,3 +1,0 @@
-/home/jake/Documents/College/EMC/dsa-emc/cppdsa/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/jake/Documents/College/EMC/dsa-emc/cppdsa/cmake-build-debug/CMakeFiles/cppdsa.dir
-/home/jake/Documents/College/EMC/dsa-emc/cppdsa/cmake-build-debug/CMakeFiles/edit_cache.dir
