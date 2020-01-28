@@ -16,7 +16,7 @@ def checkPrime(num):
 
 #Function to define P, Q and g
 def defineParams():
-    P = Q = g = True 
+    P = Q = g = False 
     while not P and not Q: 
         P = int(input("Enter your P : "), 0)
         if not checkPrime(P):
@@ -30,9 +30,11 @@ def defineParams():
             print ("p-1 must be a multiple of Q!")
             P = Q = False
 
-        if not g:
+        else:
             g = int(input("Enter your g : "), 0)
-            g = True
+            break
+
+
         print ("\n\n")
     return P, Q, g
 
