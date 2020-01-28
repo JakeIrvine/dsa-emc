@@ -30,9 +30,9 @@ def defineParams():
             print ("p-1 must be a multiple of Q!")
             P = Q = False
 
-        if not g:
+        else:
             g = int(input("Enter your g : "), 0)
-            g = True
+            break
         print ("\n\n")
     return P, Q, g
 
