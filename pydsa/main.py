@@ -63,7 +63,7 @@ def sign(m,priv_key):
             
         # Add code to compute s = (k_inv * (H + priv_key*r)) mod Q
             
-        s = (k_inv*(H+priv_key*r))%Q
+        s = (k_inv *(H + priv_key*r))%Q
 
     return r,s
 
@@ -74,7 +74,7 @@ def verify(sig,m,pub_key):
 
     # Add code to check whether 0<r<Q and 0<s<Q, otherwise the signature is rejected.
 	
-    if 0<r<Q and 0<s<Q:
+    if 0>r or r >Q or 0>s or s>Q:
         return False	
 	
     H = hash_function(m) # Compute the hash of the message
@@ -83,7 +83,7 @@ def verify(sig,m,pub_key):
 	
     # Add code to compute v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
 	
-    v = (pow(g,H*s_inv%Q)%P)%Q 
+    v = (pow(g,H*s_inv%Q)* pow(pub_key, r*s_inv%Q))%P%Q 
 
     # Add code to check that v == r
 	
@@ -116,4 +116,3 @@ print("signature = (r,s) =", signature)
 verification = verify(signature,message,public_key)
 
 print("verification =", verification)
-
