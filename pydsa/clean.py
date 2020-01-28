@@ -55,7 +55,7 @@ def modularInverse(num, mod):
 # Define a function to generate a DSA private and public key pair.
 def keyGen(P, Q, g):
     while True:
-        privKey = int(input("Enter Private Key : "))
+        privKey = int(input("Enter Private Key : "), 0)
         if 1<privKey<Q-1:
             break
         else:

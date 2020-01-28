@@ -1,5 +1,5 @@
-import random # We need to import the random module to generate random numbers during key and signature generation. We'll use the randint function from the random module to do this.
-import hashlib # We'll use hash functions from the hashlib module to hash our messages.
+import random  # We need to import the random module to generate random numbers during key and signature generation. We'll use the randint function from the random module to do this.
+import hashlib  # We'll use hash functions from the hashlib module to hash our messages.
 
 
 # Define the parameters 
