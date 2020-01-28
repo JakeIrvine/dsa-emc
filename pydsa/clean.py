@@ -16,7 +16,7 @@ def checkPrime(num):
 
 #Function to define P, Q and g
 def defineParams():
-    P = Q = g = True 
+    P = Q = g = False
     while not P and not Q: 
         P = int(input("Enter your P : "), 0)
         if not checkPrime(P):
