@@ -2,6 +2,8 @@ import random
 import hashlib
 import math
 
+def menu():
+    print ("[1] Enter all Values :")
 #Function to check if input num is prime
 def checkPrime(num):
     lim = math.ceil(math.sqrt(num))
@@ -42,4 +44,8 @@ def hashFunction(text, hashFunc = "sha1"):
     return hashed_message
 
 
-def modularInverse()
+def modularInverse(num, mod):
+    return pow(num, mod-2, mod)
+
+
+

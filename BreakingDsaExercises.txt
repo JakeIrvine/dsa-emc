@@ -11,6 +11,7 @@ A lot of the questions will require paper and pen calculations before cracking t
 The pen and paper calculations will mostly require playing with numbers (mod q), so it will definitely help to make yourself comfortable with modular arithmetic! 
 In particular it helps to know that you can add, subtract and multiply numbers normally, and rules of indices work the exact same way as normal.
 Instead of division, however, (for every number except 0) you must instead multiply by its multiplicative inverse (mod q) to "divide by" that number (useful for moving things around equations). There are no fractions, only whole numbers!
+
 A multiplicative inverse is just the number you multiply by to get 1. E.g. 2 * 4 = 1 (mod 7) so 2 is the inverse of 4, and so instead of dividing by 2 you multiply by 4! Simple! (Maybe try a few examples)
 For example if we have 4x = 6 (mod 11), then we may calculate 3*4x = 3*6 (mod 11), 12x = 18 (mod 11), x = 7 (mod 11).
 When the modulus is a prime (like q) an easy way of finding an inverse is by using Fermat's Little Theorem (google it). What's special about the number a^(p - 2) (mod q)?
@@ -34,7 +35,7 @@ Finally, the fiddly business of converting bytes to integers and back is tricky 
 	r = 968122975261745054561805511895297282641641279955                                                                                                                               
 	s = 683324890805829105256759883887052508552354821874
 
-	(to save formatting anomalies, message hash = 0xe87288d30ba2e4b042c334e54a14620f467d213c)
+  (to save formatting anomalies, message hash = 0xe87288d30ba2e4b042c334e54a14620f467d213c)
 
 	Eve is the troublemaker who has been pretending to be Alice. She wants to carry on causing mischief but surely if Alice signs her messages with a NIST-standard signature scheme she won't be able to...
 	
