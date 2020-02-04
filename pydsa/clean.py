@@ -96,13 +96,11 @@ def verify(sig,m,pubKey):
         return False
 
 # Code testing: generate a key pair
-#P,Q,g,privKey,pubKey = defineParams()
+P,Q,g,privKey,pubKey = defineParams()
 
 
 
 # Code testing: sign a message with the private key generated
-print(hashFunction(input()))
-
 message = input("Message : ")
 signature = sign(message,privKey)
 print("signature = (r,s) =", signature)
