@@ -2,10 +2,6 @@ import random
 import hashlib
 import math
 
-def menu():
-    print ("[1] Enter all Values :")
-    
-#Function to check if input num is prime
 def checkPrime(num):
     lim = math.ceil(math.sqrt(num))
     for i in range(2, lim):
@@ -16,25 +12,14 @@ def checkPrime(num):
 
 #Function to define P, Q and g
 def defineParams():
-    P = Q = g = False
-    while not P and not Q: 
-        P = int(input("Enter your P : "), 0)
-        if not checkPrime(P):
-            P = False
-
-        Q = int(input("Enter your Q : "), 0)
-        if not checkPrime(Q):
-            Q = False
-
-        elif (P-1)%Q != 0:
-            print ("p-1 must be a multiple of Q!")
-            P = Q = False
-
-        else:
-            g = int(input("Enter your g : "), 0)
-            break
-        print ("\n\n")
-    return P, Q, g
+    P = int(input("Enter your P : "), 0)
+    Q = int(input("Enter your Q : "), 0)
+    g = int(input("Enter your g : "), 0)
+    privKey = int(input("Enter your private key : "), 0)
+    pubKey = int(input("Enter your public key : "), 0)
+    
+    print ("\n\n")
+    return P, Q, g, privKey, pubKey
 
 #Function to hash messages
 #options for hashFunc are : sha1, md5, sha224, sha256, sha384, sha512
@@ -53,6 +38,7 @@ def modularInverse(num, mod):
 # Now for the DSA functions that carry out key generation, signing and verification
 
 # Define a function to generate a DSA private and public key pair.
+# Not used for decryption
 def keyGen(P, Q, g):
     while True:
         privKey = int(input("Enter Private Key : "), 0)
@@ -95,13 +81,12 @@ def verify(sig,m,pubKey):
         return False	
 	
     H = hashFunction(m) # Compute the hash of the message
-	
     s_inv = modularInverse(s,Q) # Compute s^-1 mod Q 
 	
     # Add code to compute v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
 	
     v = (pow(g,H*s_inv%Q)* pow(pubKey, r*s_inv%Q))%P%Q 
-
+    
     # Add code to check that v == r
 	
     if v==r: 
@@ -111,16 +96,14 @@ def verify(sig,m,pubKey):
         return False
 
 # Code testing: generate a key pair
-P,Q,g = defineParams()
+#P,Q,g,privKey,pubKey = defineParams()
 
-privKey,pubKey = keyGen(P, Q, g)
 
-print("private key =", privKey)
-print("public key =", pubKey)
 
 # Code testing: sign a message with the private key generated
+print(hashFunction(input()))
 
-message = "hello"
+message = input("Message : ")
 signature = sign(message,privKey)
 print("signature = (r,s) =", signature)
 
