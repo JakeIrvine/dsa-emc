@@ -85,8 +85,21 @@ def verify(sig,m,pubKey):
 	
     # Add code to compute v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
 	
-    v = (pow(g,H*s_inv%Q)* pow(pubKey, r*s_inv%Q))%P%Q 
-    
+    print (g)
+    print (H*s_inv)
+    print (Q)
+    v = pow(g,H*s_inv % Q) 
+    print("1")
+    v *=pow(pubKey, r*s_inv % Q)
+    print("2")
+    v %= P
+    print("3")
+    v %= Q 
+    print("4")
+
+
+    print(v)
+
     # Add code to check that v == r
 	
     if v==r: 
