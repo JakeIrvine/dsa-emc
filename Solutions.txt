@@ -1,2 +1,5 @@
-1.
+1. i) Eve can send out a message from Alice by running the algorithm normally. Since Eve has the private key, and all parameters, she can sign her own messages with a valid Alice signature.
+  ii) Message: Screw you alice!
+      Signature: r = 809304215582509806415504184278247210482869715784
+		 s = 648034331915913842536085741818387259052900662535
 
