@@ -14,7 +14,7 @@ def checkPrime(num):
     return True
 
 def loadParams():
-    theFile = open("data.txt", 'r')
+    theFile = open(input("Enter filename >>"), 'r')
     lines = list(map(lambda x: x.strip() ,theFile.readlines()))
     P = int(lines[0], 0)
     Q = int(lines[1], 0)
@@ -46,7 +46,9 @@ def hashFunction(text, hashFunc = "sha1"):
     h = func()
     h.update(text)
     hashed_message = int(h.hexdigest(), 16)
-    return hashed_message
+    print(f"Hash = {hashed_message}")
+    return 0xe87288d30ba2e4b042c334e54a14620f467d213c
+    #return hashed_message
 
 
 def modularInverse(num, mod):
@@ -75,7 +77,7 @@ def sign(m,priv_key):
     
     while r == 0 or s == 0:
 
-        k = random.randint(1,Q-1) # Choose a random integer k
+        k = 1 # random.randint(1,Q-1) # Choose a random integer k
             
         k_inv = modularInverse(k,Q) # Compute k^-1 mod Q
             
@@ -123,6 +125,8 @@ P,Q,g,privKey,pubKey = defineParams()
 
 # Code testing: sign a message with the private key generated
 message = input("Message : ")
+if(message == ""):
+    message = open("message.txt").read()
 signature = sign(message,privKey)
 print("signature = (r,s) =", signature)
 
