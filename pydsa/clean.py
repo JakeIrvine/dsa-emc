@@ -120,7 +120,9 @@ def verify(sig,m,pubKey):
 
 # Code testing: generate a key pair
 
-
+def calculateK(g, P Q, r, s, x, message):
+    h = hashFunction(message)
+    return (modularInverse(s, Q) * (h + x*r)) % Q
 
 if __name__ == "__main__":
     P,Q,g,privKey,pubKey = defineParams()

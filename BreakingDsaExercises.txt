@@ -34,7 +34,7 @@ Finally, the fiddly business of converting bytes to integers and back is tricky 
 	- Alice"
 	r = 968122975261745054561805511895297282641641279955                                                                                                                               
 	s = 683324890805829105256759883887052508552354821874
-
+ 
   (to save formatting anomalies, message hash = 0xe87288d30ba2e4b042c334e54a14620f467d213c)
 
 	Eve is the troublemaker who has been pretending to be Alice. She wants to carry on causing mischief but surely if Alice signs her messages with a NIST-standard signature scheme she won't be able to...
