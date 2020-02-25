@@ -119,10 +119,11 @@ def verify(sig,m,pubKey):
         return False
 
 # Code testing: generate a key pair
-P,Q,g,privKey,pubKey = defineParams()
+
 
 
 if __name__ == "__main__":
+    P,Q,g,privKey,pubKey = defineParams()
     # Code testing: sign a message with the private key generated
     message = input("Message : ")
     if(message == ""):
