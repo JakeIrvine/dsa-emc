@@ -122,17 +122,17 @@ def verify(sig,m,pubKey):
 P,Q,g,privKey,pubKey = defineParams()
 
 
+if __name__ == "__main__":
+    # Code testing: sign a message with the private key generated
+    message = input("Message : ")
+    if(message == ""):
+        message = open("message.txt").read()
+    signature = sign(message,privKey)
+    print("signature = (r,s) =", signature)
 
-# Code testing: sign a message with the private key generated
-message = input("Message : ")
-if(message == ""):
-    message = open("message.txt").read()
-signature = sign(message,privKey)
-print("signature = (r,s) =", signature)
 
+    # Code testing: verify the signature with the public key generated
 
-# Code testing: verify the signature with the public key generated
+    verification = verify(signature,message,pubKey)
 
-verification = verify(signature,message,pubKey)
-
-print("verification =", verification)
+    print("verification =", verification)
