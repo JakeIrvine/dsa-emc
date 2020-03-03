@@ -46,9 +46,9 @@ def hashFunction(text, hashFunc = "sha1"):
     h = func()
     h.update(text)
     hashed_message = int(h.hexdigest(), 16)
-    print(f"Hash = {hashed_message}")
-    return 0xe87288d30ba2e4b042c334e54a14620f467d213c
-    #return hashed_message
+    #print(f"Hash = {hashed_message}")
+    #return 0xe87288d30ba2e4b042c334e54a14620f467d213c
+    return hashed_message
 
 
 def modularInverse(num, mod):
@@ -126,7 +126,7 @@ def calculateK(g, P, Q, r, s, x, message):
 
 def calculateX(Q, s, k, r, message):
     h = hashFunction(message)
-    return ((s*k - h)/r)%Q
+    return ((s*k - h)*modularInverse(r, Q))%Q
 
 if __name__ == "__main__":
     P,Q,g,privKey,pubKey = defineParams()
