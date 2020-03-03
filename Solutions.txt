@@ -12,4 +12,6 @@ signature = (r,s) = (501253276143788752446680418155799534842887411078, 490493288
 3. i) k = 12345
   ii) The values of k are both the same, so it is likely that the next value of k will be 12345
  iii) x = ((sk - H(m)) / r) mod q
- 
+  iv) 314159
+
+4. i) Both values of r are the same, so the same value of k has been used for both messsages. r is actually the same for questions 1, 2, 3 as well.
