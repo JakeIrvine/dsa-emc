@@ -128,6 +128,13 @@ def calculateX(Q, s, k, r, message):
     h = hashFunction(message)
     return ((s*k - h)*modularInverse(r, Q))%Q
 
+def findXfromSameK(Q, h1, h2, s1, s2, r):
+    s1_inv = modularInverse(s1, Q)
+    s2_inv = modularInverse(s2, Q)
+    first_bit = s1_inv*h1 - s2_inv*h2
+    second_bit = s2_inv - s1_inv
+    return first_bit * modularInverse(second_bit, Q) * modularInverse(r, Q) % Q
+
 if __name__ == "__main__":
     P,Q,g,privKey,pubKey = defineParams()
     # Code testing: sign a message with the private key generated
