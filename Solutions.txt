@@ -5,6 +5,7 @@
 
 2. i) y = g^x mod p ; this will only be satisfied if x is correct 
   ii) x = 0xbeef
+	we checked with part 2i and this equation was satisfied!
  iii) Message : Hi, my name is Lucía
 signature = (r,s) = (501253276143788752446680418155799534842887411078, 490493288456700381214967074730069495319100320485)
 501253276143788752446680418155799534842887411078
