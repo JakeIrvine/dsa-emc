@@ -125,8 +125,7 @@ def calculateK(g, P, Q, r, s, x, message):
     return (modularInverse(s, Q) * (h + x*r)) % Q
 
 def calculateX(Q, s, k, r, message):
-    h = hashFunction(message)
-    return ((s*k - h)*modularInverse(r, Q))%Q
+    return ((s*k - message)*modularInverse(r, Q))%Q
 
 def findXfromSameK(Q, h1, h2, s1, s2, r):
     s1_inv = modularInverse(s1, Q)

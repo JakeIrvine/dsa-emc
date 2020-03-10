@@ -1,4 +1,4 @@
-import clean
+import main 
 
 Q = 0xf4f47f05794b256174bba6e9b396a7707e563c5b
 
@@ -9,7 +9,6 @@ k = 12345
 r = 968122975261745054561805511895297282641641279955 
 
 
-message = "Eve, I know it's you doing this. I'm on to you!"
-	#y = 0xe76f086c0a0a84ad2e2de8e2d85dc190c6ebcc95a59b633ed2d629b41abbb8b4e8fd2cb470fca8944f303ce7e1d2803754aa4c2a78ff3095d0c0e8da9398392bd70dbeef37aa49decbe2ad9f8de3831fea1a16ee03f94d38c9b60991c3d0933dfda2bbef1ac84d22496ee611c893dfa6473b3f99eb44348d7055dbcca7ec3f5''' 
+message = main.hashFunction("Eve, I know it's you doing this. I'm on to you!")
 
 print(clean.calculateX(Q, s, k, r, message))
