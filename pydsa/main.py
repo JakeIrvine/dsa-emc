@@ -1,61 +1,85 @@
-import random  # We need to import the random module to generate random numbers during key and signature generation. We'll use the randint function from the random module to do this.
-import hashlib  # We'll use hash functions from the hashlib module to hash our messages.
+import random
+import hashlib
+import math
+from tqdm import tqdm
 
 
-# Define the parameters 
 
-P = 283
-Q = 47
-g = 60
+def checkPrime(num):
+    lim = math.ceil(math.sqrt(num))
+    for i in range(2, lim):
+        if num%i == 0:
+            print (i)
+            return False
+    return True
+
+def loadParams():
+    theFile = open(input("Enter filename >>"), 'r')
+    lines = list(map(lambda x: x.strip() ,theFile.readlines()))
+    P = int(lines[0], 0)
+    Q = int(lines[1], 0)
+    g = int(lines[2], 0)
+    privKey = int(lines[3], 0)
+    pubKey = int(lines[4], 0)
+    return P, Q, g, privKey, pubKey
+
+#Function to define P, Q and g
+def defineParams():
+    old = "y" in input("Load from file: ").lower()
+    if old:
+        return loadParams()
+    P = int(input("Enter your P : "), 0)
+    Q = int(input("Enter your Q : "), 0)
+    g = int(input("Enter your g : "), 0)
+    privKey = int(input("Enter your private key : "), 0)
+    pubKey = int(input("Enter your public key : "), 0)
 
 
-# Define a function to hash our messages
-# This hash function is "sha1"
-# To change the hash function swap "sha1" on line two, for "md5", "sha224", "sha256", "sha384" or "sha512"
-# The first three lines hash the message m
-# In the fourth line, we convert the hash output to an integer
+    print ("\n\n")
+    return P, Q, g, privKey, pubKey
 
-def hash_function(m):
-    m = m.encode()
-    h = hashlib.sha1()
-    h.update(m)
-    hashed_message = int(h.hexdigest(),16)
+#Function to hash messages
+#options for hashFunc are : sha1, md5, sha224, sha256, sha384, sha512
+def hashFunction(text, hashFunc = "sha1"):
+    text = text.encode()
+    func = getattr(hashlib, hashFunc)    
+    h = func()
+    h.update(text)
+    hashed_message = int(h.hexdigest(), 16)
+    #print(f"Hash = {hashed_message}")
+    #return 0xe87288d30ba2e4b042c334e54a14620f467d213c
     return hashed_message
 
 
-# Define a modular inverse function 
-# This function finds the modular inverse of a mod N, denoted a^-1 mod N
-# We use "Fermat's Little Theorem" to make this computation simple and so this function only works when N is prime
-# (In general, throughout this code, calculate a^b mod N with the "pow" function: a^b mod N = pow(a,b,N))
-
-def modular_inverse(a,N):
-    a_inv = pow(a,N-2,N)
-    return a_inv
-
+def modularInverse(num, mod):
+    return pow(num, mod-2, mod)
 
 # Now for the DSA functions that carry out key generation, signing and verification
 
 # Define a function to generate a DSA private and public key pair.
+# Not used for decryption
+def keyGen(P, Q, g):
+    while True:
+        privKey = int(input("Enter Private Key : "), 0)
+        if 1<privKey<Q-1:
+            break
+        else:
+            print("Please enter an integer between 1 and " + Q-1+"\n\n")
 
-def key_generation():
-    priv_key = random.randint(1,Q-1) # Compute the private key
-	
-    pub_key = pow(g,priv_key,P) # Compute the public key, pub_key = (g ^ priv_key) mod P
-
-    return priv_key,pub_key
+    pubKey = pow(g,privKey,P) # Compute the public key, pub_key = (g ^ priv_key) mod P
+    return privKey,pubKey
 
 # Define a function to sign a message, m, with a private key, priv_key.
-
 def sign(m,priv_key):
-    H = hash_function(m) # Compute the hash of the message
+    H = hashFunction(m) # Compute the hash of the message
     r = 0
     s = 0
     
     while r == 0 or s == 0:
 
-        k = random.randint(1,Q-1) # Choose a random integer k
+        k = 1 # random.randint(1,Q-1) # Choose a random integer k
             
-        k_inv = modular_inverse(k,Q) # Compute k^-1 mod Q
+        k_inv = modularInverse(k,Q) # Compute k^-1 mod Q
             
         # Add code to compute r = (g ^ k mod P) mod Q 
             
@@ -69,21 +93,22 @@ def sign(m,priv_key):
 
 # Define a function to verify a signature, sig, on a message, m, with public key, pub_key.
 
-def verify(sig,m,pub_key):
+def verify(sig,m,pubKey):
     r,s = sig
 
-    # Add code to check whether 0<r<Q and 0<s<Q, otherwise the signature is rejected.
-	
     if 0>r or r >Q or 0>s or s>Q:
         return False	
 	
-    H = hash_function(m) # Compute the hash of the message
+    H = hashFunction(m) # Compute the hash of the message
+    s_inv = modularInverse(s,Q) # Compute s^-1 mod Q 
 	
-    s_inv = modular_inverse(s,Q) # Compute s^-1 mod Q 
-	
-    # Add code to compute v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
-	
-    v = (pow(g,H*s_inv%Q)* pow(pub_key, r*s_inv%Q))%P%Q 
+    # Add code to compute s v = (g ^ (H*s_inv mod Q) * y ^ (r*s_inv mod Q)) mod P mod Q
+
+    v = (pow(g, H*s_inv % Q, P) * pow(pubKey, r*s_inv % Q, P)) % P % Q
+
+
+
+    print(v)
 
     # Add code to check that v == r
 	
@@ -92,27 +117,36 @@ def verify(sig,m,pub_key):
 	
     else:
         return False
-		
-		
+
 # Code testing: generate a key pair
 
-private_key,public_key = key_generation()
+def calculateK(g, P, Q, r, s, x, message):
+    h = hashFunction(message)
+    return (modularInverse(s, Q) * (h + x*r)) % Q
 
-print("private key =", private_key)
-print("public key =", public_key)
+def calculateX(Q, s, k, r, message):
+    h = hashFunction(message)
+    return ((s*k - h)*modularInverse(r, Q))%Q
+
+def findXfromSameK(Q, h1, h2, s1, s2, r):
+    s1_inv = modularInverse(s1, Q)
+    s2_inv = modularInverse(s2, Q)
+    first_bit = s1_inv*h1 - s2_inv*h2
+    second_bit = s2_inv - s1_inv
+    return first_bit * modularInverse(second_bit, Q) * modularInverse(r, Q) % Q
+
+if __name__ == "__main__":
+    P,Q,g,privKey,pubKey = defineParams()
+    # Code testing: sign a message with the private key generated
+    message = input("Message : ")
+    if(message == ""):
+        message = open("message.txt").read()
+    signature = sign(message,privKey)
+    print("signature = (r,s) =", signature)
 
 
-# Code testing: sign a message with the private key generated
+    # Code testing: verify the signature with the public key generated
 
-message = "hello"
+    verification = verify(signature,message,pubKey)
 
-signature = sign(message,private_key)
-
-print("signature = (r,s) =", signature)
-
-
-# Code testing: verify the signature with the public key generated
-
-verification = verify(signature,message,public_key)
-
-print("verification =", verification)
+    print("verification =", verification)
