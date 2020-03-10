@@ -21,4 +21,4 @@ signature = (r,s) = (501253276143788752446680418155799534842887411078, 490493288
   iv) cool.
    v) Because the key is sent in the first message where it is used, an attacker could simply create a new keypair using the same parameters and send a signed message using the new keypair, telling everyone the public key in that message.
 
-5. 
+5. i.) k in q4 was 12346, so we are guessed 12347. 
