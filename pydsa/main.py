@@ -135,6 +135,9 @@ def findXfromSameK(Q, h1, h2, s1, s2, r):
     second_bit = s2_inv - s1_inv
     return first_bit * modularInverse(second_bit, Q) * modularInverse(r, Q) % Q
 
+def verifyX(g, x, p, y):
+	return y = pow(g,x,p)
+
 if __name__ == "__main__":
     P,Q,g,privKey,pubKey = defineParams()
     # Code testing: sign a message with the private key generated
