@@ -135,7 +135,10 @@ def findXfromSameK(Q, h1, h2, s1, s2, r):
     return first_bit * modularInverse(second_bit, Q) * modularInverse(r, Q) % Q
 
 def verifyX(g, x, p, y):
-	return y = pow(g,x,p)
+	return y == pow(g,x,p)
+
+def incrementalK(h1, h2, r1, r2, s1, s2, Q, diff = 1):
+    return (diff*(h2-s2-(h1 * modularInverse(r1,Q) * r2))*modularInverse(s2-(s1*modularInverse(r1, Q) * r2), Q)) % Q
 
 if __name__ == "__main__":
     P,Q,g,privKey,pubKey = defineParams()
