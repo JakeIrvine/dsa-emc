@@ -21,4 +21,13 @@ signature = (r,s) = (501253276143788752446680418155799534842887411078, 490493288
   iv) cool.
    v) Because the key is sent in the first message where it is used, an attacker could simply create a new keypair using the same parameters and send a signed message using the new keypair, telling everyone the public key in that message.
 
-5. i.) k in q4 was 12346, so we are guessed 12347. 
+
+5. i) The value of k in  [1-3]) was 12345, the value of k in 4) was 12346, so perhaps the value of k in 5) is 12347
+  ii) x = 123123
+
+6. i) k = (h2 - s2 - h1*r1_inv*r2) * (s2-s1*r1_inv*r2)_inv mod Q
+  ii) k = 2718281828, k+1 = 2718281829, x = 0xdec0ded
+
+7. i) k = (h2 - n*s2 -h1*r1_inv*r2) * (s2-s1*r1_inv*r2)_inv mod q, where n is the number of messages between the two messages
+  ii) brute force the value of n
+ iii) k = 60221409 x = 0xdeadbeef999
